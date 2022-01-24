@@ -24,7 +24,7 @@ public class App {
     	Runtime.getRuntime().addShutdownHook(new Thread() {
     		@Override
     		public void run() {
-    			logger.info("Getting ready to shutdown ...");
+    			logger.warn("Getting ready to shutdown ...");
     		}
     	});
     	
