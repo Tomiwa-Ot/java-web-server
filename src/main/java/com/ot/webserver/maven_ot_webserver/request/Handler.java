@@ -34,7 +34,7 @@ public class Handler implements Runnable {
 				
 			} else {
 				logger.info(requestMethod.toUpperCase() + ": (405) " + Config.STATUS_CODES.get(405));
-				response = new Response(405, Config.STATUS_CODES.get(405));
+				response = new Response(405, this.socket);
 				response.responseView();
 			}
 		} catch (IOException e) {
