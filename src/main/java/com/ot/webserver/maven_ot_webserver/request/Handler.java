@@ -39,17 +39,29 @@ public class Handler implements Runnable {
 				} else {
 					File file = new File(uri.substring(1));
 					if(file.exists()) {
-						
-					} else if (file.isDirectory()) {
-						
-					} else {
 						logger.info(uri + ": (404) " + Config.STATUS_CODES.get(404));
+						response = new Response(404, this.socket);
+						response.responseView();
+					} else if (file.isDirectory()) {
+						StringBuilder output = new StringBuilder("<html><head><title>Index of " + uri.substring(1));
+						output.append("</title></head><body><h1>Index of " + uri.substring(1));
+						output.append("</h1><hr><pre>");
+						File[] files = file.listFiles();
+						for (File f : files) {
+							output.append(" <a href=\"" + f.getPath() + "\">" + f.getPath() + "</a>\n");
+						}
+						output.append("<hr></pre></body></html>");
+						logger.info(uri + ": (200) " + Config.STATUS_CODES.get(200));
+						response = new Response(200, this.socket, output);
+						response.responseView();
+					} else {
+						logger.error(uri + ": (404) " + Config.STATUS_CODES.get(404));
 						response = new Response(404, this.socket);
 						response.responseView();
 					}
 				}
 			} else {
-				logger.info(requestMethod.toUpperCase() + ": (405) " + Config.STATUS_CODES.get(405));
+				logger.error(requestMethod.toUpperCase() + ": (405) " + Config.STATUS_CODES.get(405));
 				response = new Response(405, this.socket);
 				response.responseView();
 			}
