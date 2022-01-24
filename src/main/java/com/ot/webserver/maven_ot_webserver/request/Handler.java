@@ -2,7 +2,9 @@ package com.ot.webserver.maven_ot_webserver.request;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.Socket;
 
@@ -24,10 +26,10 @@ public class Handler implements Runnable {
 
 	@Override
 	public void run() {
-		getHeaders(this.socket);
+		processRequest(this.socket);
 	}
 	
-	public void getHeaders(Socket s) {
+	public void processRequest(Socket s) {
 		try {
 			BufferedReader in = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
 			String requestMethod = in.readLine().split("\\s+")[0];
@@ -35,25 +37,25 @@ public class Handler implements Runnable {
 			if(requestMethod.equalsIgnoreCase(Config.METHODS.GET.toString())) {
 				String uri = in.readLine().split("\\s+")[1];
 				if(uri.equals("/")) {
-					
+					File file = new File(".");
+					directoryListing(uri, file);
 				} else {
 					File file = new File(uri.substring(1));
 					if(file.exists()) {
-						logger.info(uri + ": (404) " + Config.STATUS_CODES.get(404));
-						response = new Response(404, this.socket);
+						int length = (int) file.length();
+						byte[] bytes = new byte[length];
+						InputStream i = new FileInputStream(file);
+						int offset = 0;
+						while (offset < length) {
+							int count = i.read(bytes, offset, (length - offset));
+							offset += count;
+						}
+						i.close();
+						logger.info(uri + ": (200) " + Config.STATUS_CODES.get(200));
+						response = new Response(200, this.socket, bytes, true);
 						response.responseView();
 					} else if (file.isDirectory()) {
-						StringBuilder output = new StringBuilder("<html><head><title>Index of " + uri.substring(1));
-						output.append("</title></head><body><h1>Index of " + uri.substring(1));
-						output.append("</h1><hr><pre>");
-						File[] files = file.listFiles();
-						for (File f : files) {
-							output.append(" <a href=\"" + f.getPath() + "\">" + f.getPath() + "</a>\n");
-						}
-						output.append("<hr></pre></body></html>");
-						logger.info(uri + ": (200) " + Config.STATUS_CODES.get(200));
-						response = new Response(200, this.socket, output);
-						response.responseView();
+						directoryListing(uri, file);
 					} else {
 						logger.error(uri + ": (404) " + Config.STATUS_CODES.get(404));
 						response = new Response(404, this.socket);
@@ -65,9 +67,24 @@ public class Handler implements Runnable {
 				response = new Response(405, this.socket);
 				response.responseView();
 			}
+			in.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public void directoryListing(String uri, File file) {
+		StringBuilder output = new StringBuilder("<html><head><title>Index of " + uri);
+		output.append("</title></head><body><h1>Index of " + uri);
+		output.append("</h1><hr><pre>");
+		File[] files = file.listFiles();
+		for (File f : files) {
+			output.append(" <a href=\"" + f.getPath() + "\">" + f.getPath() + "</a>\n");
+		}
+		output.append("<hr></pre></body></html>");
+		logger.info(uri + ": (200) " + Config.STATUS_CODES.get(200));
+		response = new Response(200, this.socket, output, false);
+		response.responseView();
 	}
 
 }
