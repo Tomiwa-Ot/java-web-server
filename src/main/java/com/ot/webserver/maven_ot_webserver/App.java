@@ -19,15 +19,17 @@ public class App {
     public static void main(String[] args) {
     	
     	// Load configurations
-    	Config.getInstance().loadConfigurations();
+    	try {
+			Config.getInstance().loadConfigurations();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
     	logger.info("Loading configurations from src/main/resources/properties.json");
     	
     	setPort(args);
     	logger.info("Server is starting ...");
     	
-    	if(!Config.getInstance().getUsername().equals(null) && !Config.getInstance().equals(null)) {
-    	
-    	}
+
     	
     	// Shutdown cleanup
     	Runtime.getRuntime().addShutdownHook(new Thread() {
@@ -43,6 +45,9 @@ public class App {
 			@SuppressWarnings("resource")
 			ServerSocket serverSocket = new ServerSocket(Config.PORT);
 			while(true) {
+//		    	if(!Config.getInstance().getUsername().equals(null) && !Config.getInstance().equals(null)) {
+//		    	
+//		    	}
 				Socket socket = serverSocket.accept();
 				Listener.getInstance().addRequestToQueue(socket);
 				requestHandler.execute(new Handler(Listener.getInstance().handleRequest()));
