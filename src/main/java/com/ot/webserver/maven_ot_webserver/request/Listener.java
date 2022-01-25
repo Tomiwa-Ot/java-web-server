@@ -17,7 +17,7 @@ public class Listener {
 	
 	public void addRequestToQueue(Socket s) {
 		try {
-			logger.info("New connection from " + s.getLocalSocketAddress() + "added to connection queue");
+			logger.info("New connection from " + s.getRemoteSocketAddress() + " added to connection queue");
 			connectionQueue.put(s);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
@@ -27,7 +27,7 @@ public class Listener {
 	public Socket handleRequest() {
 		try {
 			Socket s = connectionQueue.take();
-			logger.info("Procesing " + s.getLocalSocketAddress());
+			logger.info("Procesing " + s.getRemoteSocketAddress());
 			return s;
 		} catch (InterruptedException e) {
 			e.printStackTrace();
