@@ -18,7 +18,16 @@ public class App {
 	
     public static void main(String[] args) {
     	
+    	// Load configurations
+    	Config.getInstance().loadConfigurations();
+    	logger.info("Loading configurations from src/main/resources/properties.json");
+    	
     	setPort(args);
+    	logger.info("Server is starting ...");
+    	
+    	if(!Config.getInstance().getUsername().equals(null) && !Config.getInstance().equals(null)) {
+    	
+    	}
     	
     	// Shutdown cleanup
     	Runtime.getRuntime().addShutdownHook(new Thread() {
