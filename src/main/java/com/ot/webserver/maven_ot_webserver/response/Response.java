@@ -45,7 +45,6 @@ public class Response {
 		SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss z");
 		headers.add("HTTP/1.0 " + Integer.toString(this.statusCode) + " " + Config.STATUS_CODES.get(this.statusCode));
 		headers.add("Content-Type: text/html");
-		headers.add("Connection: close");
 		headers.add("Date: " + formatter.format(new Date(System.currentTimeMillis())));
 		headers.add("Server: Simple Java Web Server");
 	}
