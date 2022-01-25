@@ -26,15 +26,15 @@ public class Config {
 		return password;
 	}
 
-	public static int PORT = 8080;
+	public static int PORT;
 	
 	public static final int PORT_MIN = 1;
 	
 	public static final int PORT_MAX = 65535;
 	
-	public static int WORKER_THREADS = 20;
+	public static int WORKER_THREADS;
 	
-	public static int CONNECTION_QUEUE = 30;
+	public static int CONNECTION_QUEUE;
 	
 	public static enum METHODS {
 		HEAD,
