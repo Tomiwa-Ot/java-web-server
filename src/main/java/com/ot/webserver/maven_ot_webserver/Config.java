@@ -14,17 +14,11 @@ import org.json.simple.parser.ParseException;
 
 public class Config {
 	
-	private String username = null;
-	
-	public String getUsername() {
-		return username;
-	}
+	public static String username = null;
 
-	private String password = null;
+	public static String password = null;
 	
-	public String getPassword() {
-		return password;
-	}
+	public static File WWW_PATH;
 
 	public static int PORT;
 	
@@ -37,7 +31,6 @@ public class Config {
 	public static int CONNECTION_QUEUE;
 	
 	public static enum METHODS {
-		HEAD,
 		GET
 	}
 	
