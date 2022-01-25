@@ -32,10 +32,11 @@ public class Handler implements Runnable {
 	public void processRequest(Socket s) {
 		try {
 			BufferedReader in = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
-			String requestMethod = in.readLine().split("\\s+")[0];
-			// TODO check for header authorization
+			String line = in.readLine();
+			logger.info(line);
+			String requestMethod = line.split("\\s+")[0];
 			if(requestMethod.equalsIgnoreCase(Config.METHODS.GET.toString())) {
-				String uri = in.readLine().split("\\s+")[1];
+				String uri = line.split("\\s+")[1];
 				if(uri.equals("/")) {
 					File file = new File(".");
 					directoryListing(uri, file);
@@ -78,6 +79,7 @@ public class Handler implements Runnable {
 		output.append("</title></head><body><h1>Index of " + uri);
 		output.append("</h1><hr><pre>");
 		File[] files = file.listFiles();
+		logger.info(files);
 		for (File f : files) {
 			output.append(" <a href=\"" + f.getPath() + "\">" + f.getPath() + "</a>\n");
 		}
