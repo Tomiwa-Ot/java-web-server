@@ -5,6 +5,7 @@ A simple multithreaded HTTP server built with the Producer-Consumer design patte
 ### Features
 - Directory Listing
 - Basic HTTP Authentication
+- Logs all requests ```webserver.log```
 
 ### Configuration
 
