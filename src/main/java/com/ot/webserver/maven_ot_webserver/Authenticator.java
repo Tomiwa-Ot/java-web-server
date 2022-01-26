@@ -11,7 +11,7 @@ public class Authenticator {
 
 	private static ArrayList<String> headers = new ArrayList<String>();
 	
-	public static void authenticate(Socket s, String username, String password) {
+	public static void authenticate(Socket s, String base64) {
 //		if(username.equals(Config.username) && password.equals(Config.password)) {
 //			
 //		}
