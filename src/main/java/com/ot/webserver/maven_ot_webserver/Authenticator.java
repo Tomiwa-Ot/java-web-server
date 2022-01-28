@@ -6,12 +6,15 @@ import java.net.Socket;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Base64;
 
 public class Authenticator {
 
 	private static ArrayList<String> headers = new ArrayList<String>();
 	
 	public static void authenticate(Socket s, String base64) {
+		String username = new String(Base64.getDecoder().decode(base64)).split(":")[0];
+		String password = new String(Base64.getDecoder().decode(base64)).split(":")[1];
 //		if(username.equals(Config.username) && password.equals(Config.password)) {
 //			
 //		}
