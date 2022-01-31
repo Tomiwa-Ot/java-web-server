@@ -15,7 +15,7 @@ The default port used is 8080. It can be modified either by changing the port va
 java App <port_number>
 ```
 #### Basic HTTP Authentication
-To enable, change the username value from ```null``` to ```<your_username>``` and password value from ```null``` to in [properties.json](src/main/resources/properties.json)
+To enable, change the username value from ```null``` to ```<your_username>``` and password value from ```null``` to a Bcrypt hash of the password in [properties.json](src/main/resources/properties.json)
 ```json
 {
 	"username" : "my username",
@@ -33,4 +33,5 @@ The number of consumer threads and blocking queue size can be modified in [prope
 }
 ```
 #### TODO
+- Request for basic authentication if username & password are set
 - Allow user to specify web root folder
