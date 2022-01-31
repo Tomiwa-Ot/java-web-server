@@ -45,10 +45,21 @@ public class App {
 			@SuppressWarnings("resource")
 			ServerSocket serverSocket = new ServerSocket(Config.PORT);
 			while(true) {
-//		    	if(!Config.getInstance().getUsername().equals(null) && !Config.getInstance().equals(null)) {
-//		    	
-//		    	}
 				Socket socket = serverSocket.accept();
+//				TODO Implement Basic authentication check				
+//				BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+//				String line = in.readLine();
+//				while(line != null) {
+//					if(line.contains("Authorization: Basic" )) {
+//						Authenticator.authenticate(socket, line.split("\\s+")[2]);
+//						break;
+//					}
+//					line = in.readLine();
+//				}
+//		    	if(Config.username != null && Config.password != null) {
+//					Authenticator.responseView(socket);
+//					continue;
+//		    	}
 				Listener.getInstance().addRequestToQueue(socket);
 				requestHandler.execute(new Handler(Listener.getInstance().handleRequest()));
 			}
@@ -65,4 +76,5 @@ public class App {
     		logger.info("Changed PORT: " + args[0]);
     	}
     }
+    
 }
