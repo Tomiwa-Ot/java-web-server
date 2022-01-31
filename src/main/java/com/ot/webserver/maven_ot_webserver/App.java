@@ -46,7 +46,8 @@ public class App {
 			ServerSocket serverSocket = new ServerSocket(Config.PORT);
 			while(true) {
 				Socket socket = serverSocket.accept();
-//				TODO Implement Basic authentication check				
+				
+//				TODO Implement Basic Authentication Check				
 //				BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 //				String line = in.readLine();
 //				while(line != null) {
@@ -60,6 +61,7 @@ public class App {
 //					Authenticator.responseView(socket);
 //					continue;
 //		    	}
+				
 				Listener.getInstance().addRequestToQueue(socket);
 				requestHandler.execute(new Handler(Listener.getInstance().handleRequest()));
 			}
