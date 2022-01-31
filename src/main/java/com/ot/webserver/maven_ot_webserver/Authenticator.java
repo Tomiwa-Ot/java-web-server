@@ -22,7 +22,7 @@ public class Authenticator {
 	}
 	
 	public static void responseView(Socket socket) throws IOException {
-		responseHeaders(200);
+		responseHeaders(401);
 		DataOutputStream outputStream = new DataOutputStream(socket.getOutputStream());
 		for(String header : headers) {
 			outputStream.writeBytes(header + "\r\n");
