@@ -73,7 +73,7 @@ public class App {
     }
     
     public static void setPort(String[] args) {
-    	if(args.length == 1 && Integer.parseInt(args[0]) >= Config.PORT_MIN && Integer.parseInt(args[0]) < Config.PORT_MAX) {
+    	if(args.length == 1 && Integer.parseInt(args[0]) >= Config.PORT_MIN && Integer.parseInt(args[0]) <= Config.PORT_MAX) {
     		Config.PORT = Integer.parseInt(args[0]);
     		logger.info("Changed PORT: " + args[0]);
     	}
