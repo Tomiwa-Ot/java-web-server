@@ -18,8 +18,8 @@ java App <port_number>
 To enable, change the username value from ```null``` to ```<your_username>``` and password value from ```null``` to a Bcrypt hash of the password in [properties.json](src/main/resources/properties.json)
 ```json
 {
-	"username" : "my username",
-	"password" : "hash",
+	"username" : "your_username",
+	"password" : "Bcrypt hash",
 }
 ```
 To disable, set the username and password values as ```null```.
