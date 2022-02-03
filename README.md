@@ -12,6 +12,7 @@ A simple multithreaded HTTP server built with the Producer-Consumer design patte
 #### Port
 The default port used is 8080. It can be modified either by changing the port value in [properties.json](src/main/resources/properties.json) or supply it as an argument in the console.
 ```console
+javac App.java
 java App <port_number>
 ```
 #### Basic HTTP Authentication
@@ -32,6 +33,11 @@ The number of consumer threads and blocking queue size can be modified in [prope
 	"connection_queue" : 30
 }
 ```
-#### TODO
+
+#### Screenshots
+![Index page](screenshots/screenshot01.png)
+![Viewing a file](screenshots/screenshot02.jpg)
+
+### TODO
 - Request for basic authentication if username & password are set
 - Allow user to specify web root folder
