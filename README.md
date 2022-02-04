@@ -37,6 +37,7 @@ The number of consumer threads and blocking queue size can be modified in [prope
 #### Screenshots
 ![Index page](screenshots/screenshot01.png)
 ![Viewing a file](screenshots/screenshot02.jpg)
+![BAsic HTTP authorization](screenshots/screenshot03.png)
 
 ### TODO
 - Request for basic authentication if username & password are set
