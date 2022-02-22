@@ -6,8 +6,8 @@ import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.ot.webserver.maven_ot_webserver.request.Handler;
 import com.ot.webserver.maven_ot_webserver.request.Listener;
