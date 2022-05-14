@@ -1,6 +1,13 @@
 package com.ot.webserver.maven_ot_webserver;
 
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
@@ -12,9 +19,10 @@ import org.apache.logging.log4j.Logger;
 import com.ot.webserver.maven_ot_webserver.request.Handler;
 import com.ot.webserver.maven_ot_webserver.request.Listener;
 
-public class App {
+public class App implements Serializable {
 	
     private static final Logger logger = LogManager.getLogger(App.class);
+    private static boolean[] authResult;
 	
     public static void main(String[] args) {
     	
@@ -46,22 +54,23 @@ public class App {
 			ServerSocket serverSocket = new ServerSocket(Config.PORT);
 			while(true) {
 				Socket socket = serverSocket.accept();
-				
-//				TODO Implement Basic Authentication Check				
-//				BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-//				String line = in.readLine();
-//				while(line != null) {
-//					if(line.contains("Authorization: Basic" )) {
-//						Authenticator.authenticate(socket, line.split("\\s+")[2]);
-//						break;
-//					}
-//					line = in.readLine();
-//				}
-//		    	if(Config.username != null && Config.password != null) {
-//					Authenticator.responseView(socket);
-//					continue;
-//		    	}
-				
+				if(Config.username != null && Config.password != null) {
+					try {
+						authResult = authStatus(cloneSocket(socket));
+						if(!authResult[0] && !authResult[1]) {
+							Authenticator.responseView(socket);
+							continue;
+						} else if (authResult[0] && !authResult[1]) {
+							Authenticator.failedAuthenticationView(socket);
+							continue;
+						}
+							
+					} catch (ClassNotFoundException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+						continue;
+					}
+				}
 				Listener.getInstance().addRequestToQueue(socket);
 				requestHandler.execute(new Handler(Listener.getInstance().handleRequest()));
 			}
@@ -70,6 +79,31 @@ public class App {
 		}
     	
     	
+    }
+    
+    public static boolean[] authStatus(Socket socket) throws IOException {
+    	boolean[] auth = new boolean[2];
+    	BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+		String line = in.readLine();
+		while(line != null) {
+			if(line.contains("Authorization: Basic" )) {
+				auth[0] = true; auth[1] = Authenticator.authenticate(socket, line.split("\\s+")[2]);
+				return auth;
+			}
+			line = in.readLine();
+		}
+		auth[0] = false; auth[1] = false;
+		return auth;
+    }
+    
+    public static Socket cloneSocket(Socket socket) throws IOException, ClassNotFoundException {
+    	ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		ObjectOutputStream oos = new ObjectOutputStream(baos);
+		oos.writeObject(socket);
+		oos.flush();
+		byte[] bytes = baos.toByteArray();
+		ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
+		return (Socket) new ObjectInputStream(bais).readObject();
     }
     
     public static void setPort(String[] args) {
