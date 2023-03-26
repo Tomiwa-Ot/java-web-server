@@ -10,10 +10,27 @@ import java.util.Base64;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
 
+/**
+ * Handles HTTP basic authentication
+ * 
+ * @author tomiwa
+ *
+ */
 public class Authenticator {
 
 	private static ArrayList<String> headers = new ArrayList<String>();
 	
+	/**
+	 * Validate if authorization credentials are valid
+	 * 
+	 * @param s	       The incoming connection object
+	 * @param base64   The authorization header value 
+	 * 				   extracted from the connection
+	 *                 object
+	 * @return         Returns true if authentication
+	 *                 is successful and false if 
+	 *                 otherwise
+	 */
 	public static boolean authenticate(Socket s, String base64) {
 		String username = new String(Base64.getDecoder().decode(base64)).split(":")[0];
 		String password = new String(Base64.getDecoder().decode(base64)).split(":")[1];
@@ -29,6 +46,12 @@ public class Authenticator {
 		}
 	}
 	
+	/**
+	 * Builds the view for a failed basic authentication
+	 * 
+	 * @param socket The connection to send the response to
+	 * @throws IOException
+	 */
 	public static void failedAuthenticationView(Socket socket) throws IOException {
 		failedAuthenticationHeaders(401);
 		DataOutputStream outputStream = new DataOutputStream(socket.getOutputStream());
@@ -41,6 +64,11 @@ public class Authenticator {
 		outputStream.flush();
 	}
 	
+	/**
+	 * Build the headers for a failed basic authentication
+	 * 
+	 * @param statusCode The HTTP response code
+	 */
 	public static void failedAuthenticationHeaders(int statusCode) {
 		SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss z");
 		headers.add("HTTP/1.0 " + Integer.toString(statusCode) + " " + Config.STATUS_CODES.get(statusCode));
@@ -49,6 +77,11 @@ public class Authenticator {
 		headers.add("Server: Simple Java Web Server");
 	}
 	
+	/**
+	 * 
+	 * @param socket The incoming request
+	 * @throws IOException
+	 */
 	public static void responseView(Socket socket) throws IOException {
 		responseHeaders(401);
 		DataOutputStream outputStream = new DataOutputStream(socket.getOutputStream());
@@ -61,6 +94,11 @@ public class Authenticator {
 		outputStream.flush();
 	}
 	
+	/**
+	 * Builds a HTTP header that requests for basic authentication
+	 * 
+	 * @param statusCode The HTTP response code
+	 */
 	public static void responseHeaders(int statusCode) {
 		SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss z");
 		headers.add("HTTP/1.0 " + Integer.toString(statusCode) + " " + Config.STATUS_CODES.get(statusCode));

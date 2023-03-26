@@ -11,7 +11,12 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-
+/**
+ * Parse the web server configurations
+ * 
+ * @author tomiwa
+ *
+ */
 public class Config {
 	
 	public static String username = null;
@@ -48,6 +53,12 @@ public class Config {
 		return instance;
 	}
 	
+	/**
+	 * Loads the web server configurations
+	 * 
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 */
 	public void loadConfigurations() throws FileNotFoundException, IOException {
 		JSONParser jsonParser = new JSONParser();
 		File properties = new File("src/main/resources/properties.json");

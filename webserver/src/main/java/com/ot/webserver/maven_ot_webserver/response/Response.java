@@ -12,6 +12,12 @@ import org.apache.logging.log4j.Logger;
 
 import com.ot.webserver.maven_ot_webserver.Config;
 
+/**
+ * Builds HTTP responses
+ * 
+ * @author tomiwa
+ *
+ */
 public class Response {
 	
 	private byte[] bytes;
@@ -41,6 +47,9 @@ public class Response {
 		this.isFile = isFile;
 	}
 	
+	/**
+	 * Sets HTTP response header 
+	 */
 	public void responseHeaders() {
 		SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss z");
 		headers.add("HTTP/1.0 " + Integer.toString(this.statusCode) + " " + Config.STATUS_CODES.get(this.statusCode));
@@ -50,6 +59,9 @@ public class Response {
 		headers.add("Server: Simple Java Web Server");
 	}
 	
+	/**
+	 * Selects the appropriate response view based on the status code
+	 */
 	public void responseView() {
 		responseHeaders();
 		try {
@@ -83,6 +95,14 @@ public class Response {
 
 	}
 	
+	/**
+	 * Builds the response view
+	 * 
+	 * @param outputStream HTTP response object
+	 * @param bytes        The message to added in the 
+	 *                     response body
+	 * @throws IOException
+	 */
 	public void responseBytes(DataOutputStream outputStream, byte[] bytes) throws IOException {
 		for(String header : headers) {
 			outputStream.writeBytes(header + "\r\n");
@@ -95,6 +115,14 @@ public class Response {
 		outputStream.flush();
 	}
 	
+	/**
+	 * Builds the response view
+	 * 
+	 * @param outputStream HTTP response object
+	 * @param response     The message to be added in the
+	 * 					   response body
+	 * @throws IOException
+	 */
 	public void responseBytes(DataOutputStream outputStream, String response) throws IOException {
 		for(String header : headers) {
 			outputStream.writeBytes(header + "\r\n");

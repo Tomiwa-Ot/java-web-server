@@ -14,6 +14,13 @@ import org.apache.logging.log4j.Logger;
 import com.ot.webserver.maven_ot_webserver.Config;
 import com.ot.webserver.maven_ot_webserver.response.Response;
 
+
+/**
+ * Processes request on its in thread and returns a response to the client
+ * 
+ * @author tomiwa
+ *
+ */
 public class Handler implements Runnable {
 	
 	private Socket socket;
@@ -29,6 +36,11 @@ public class Handler implements Runnable {
 		processRequest(this.socket);
 	}
 	
+	/**
+	 * Build the response header and body
+	 * 
+	 * @param s The incoming connection object
+	 */
 	public void processRequest(Socket s) {
 		try {
 			BufferedReader in = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
@@ -74,6 +86,12 @@ public class Handler implements Runnable {
 		}
 	}
 	
+	/**
+	 * List files and directories contained in the requested URI
+	 * 
+	 * @param uri  The URI in the incoming request
+	 * @param file The requested file or directory
+	 */
 	public void directoryListing(String uri, File file) {
 		StringBuilder output = new StringBuilder("<html><head><title>Index of " + uri);
 		output.append("</title></head><body><h1>Index of " + uri);

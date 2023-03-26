@@ -9,12 +9,23 @@ import org.apache.logging.log4j.Logger;
 
 import com.ot.webserver.maven_ot_webserver.Config;
 
+/**
+ * Handles the connection queue
+ * 
+ * @author tomiwa
+ *
+ */
 public class Listener {
 
 	private static final Listener instance = new Listener();
 	private static BlockingQueue<Socket> connectionQueue = new ArrayBlockingQueue<Socket>(Config.CONNECTION_QUEUE);
 	private static final Logger logger = LogManager.getLogger(Listener.class);
 	
+	/**
+	 * Adds request to connection buffer
+	 * 
+	 * @param s Incoming connection
+	 */
 	public void addRequestToQueue(Socket s) {
 		try {
 			logger.info("New connection from " + s.getRemoteSocketAddress() + " added to connection queue");
@@ -24,6 +35,11 @@ public class Listener {
 		}
 	}
 	
+	/**
+	 * Removes request from the connection buffer
+	 * 
+	 * @return The connection object or null if connection buffer is empty
+	 */
 	public Socket handleRequest() {
 		try {
 			Socket s = connectionQueue.take();

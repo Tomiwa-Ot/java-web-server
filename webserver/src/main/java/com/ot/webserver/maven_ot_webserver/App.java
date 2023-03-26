@@ -81,6 +81,16 @@ public class App implements Serializable {
     	
     }
     
+    /**
+     * Performs basic authentication on incoming requests
+     * 
+     * @param socket Connection to perform authentication on
+     * @return       Returns a 2 element array of booleans. 
+     *               The first for if the request header contains
+     *               the Authorization header and the second for
+     *               if the supplied credentials are valid.
+     * @throws IOException
+     */
     public static boolean[] authStatus(Socket socket) throws IOException {
     	boolean[] auth = new boolean[2];
     	BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -96,6 +106,14 @@ public class App implements Serializable {
 		return auth;
     }
     
+    /**
+     * Make a copy of the incoming request object
+     * 
+     * @param socket The incoming request
+     * @return       The copy of the request object
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
     public static Socket cloneSocket(Socket socket) throws IOException, ClassNotFoundException {
     	ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		ObjectOutputStream oos = new ObjectOutputStream(baos);
@@ -106,6 +124,11 @@ public class App implements Serializable {
 		return (Socket) new ObjectInputStream(bais).readObject();
     }
     
+    /**
+     * Sets the port the web server should listen on
+     * 
+     * @param args
+     */
     public static void setPort(String[] args) {
     	if(args.length == 1 && Integer.parseInt(args[0]) >= Config.PORT_MIN && Integer.parseInt(args[0]) <= Config.PORT_MAX) {
     		Config.PORT = Integer.parseInt(args[0]);
